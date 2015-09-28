@@ -1,0 +1,29 @@
+// require express
+var express = require('express');
+// instantiate the app
+var app = express();
+// require path
+var path = require('path');
+// require body-parser
+var bodyParser = require('body-parser');
+
+// for regualr post requests
+app.use(bodyParser.urlencoded({extended: true}));
+// for post requests that want json back
+app.use(bodyParser.json());
+
+// set up a static file server that points to the "client" directory
+app.use(express.static(path.join(__dirname, './client')));
+
+// requrie mongoose.js from config
+// Note - you must include the mongoose.js file in your server.js file 
+// before you require the routes.js file, for example, here is part of our server.js file: 
+require('./server/config/mongoose.js');
+
+// route setter
+var route_setter = require("./server/config/routes.js");
+route_setter(app);
+
+app.listen(8888, function(){
+	console.log("chat with doodle pad on port 8888");
+});
