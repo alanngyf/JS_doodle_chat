@@ -15,6 +15,12 @@ app.use(bodyParser.json());
 // set up a static file server that points to the "client" directory
 app.use(express.static(path.join(__dirname, './client')));
 
+app.set('client', path.join(__dirname, "./client/partials"));
+
+app.get('/partials/doodle', function(req, res){
+	res.render('/partials/doodle');
+})
+
 // requrie mongoose.js from config
 // Note - you must include the mongoose.js file in your server.js file 
 // before you require the routes.js file, for example, here is part of our server.js file: 
@@ -24,6 +30,16 @@ require('./server/config/mongoose.js');
 var route_setter = require("./server/config/routes.js");
 route_setter(app);
 
-app.listen(8888, function(){
+var server = app.listen(8888, function(){
 	console.log("chat with doodle pad on port 8888");
 });
+
+var io = require('socket.io').listen(server);
+
+// Whenever a connection event happens (the connection event is built in) run the following code
+io.sockets.on('connection', function (socket) {
+  console.log("WE ARE USING SOCKETS!");
+  console.log(socket.id);
+  //all the socket code goes in here!
+})
+ 
