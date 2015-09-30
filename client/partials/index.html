@@ -7,13 +7,8 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 
-	<script type='text/javascript'>
-	$(document).ready(function()
-	{
-		var socket = io.connect();
-		console.log(socket);
 
-	})
+	<script type='text/javascript'>
 	// create our angular module
 	var doodlesApp = angular.module('doodleApp', []);
 
@@ -61,14 +56,14 @@
 				<p>
 					<label for="blue">Blue</label>
 					<input id="blue" name="blue" type="range" min=0 max=255 value=0>
-				</p>
+				</p>ou
 			</div>
 			<div>
 			<button id="addNewColor">Add Color</button>
 			</div>
 		</div>
 	</div>
-	<script src="http://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript" charset="utf-8"></script>
-	<script src="./../js/app.js" type="text/javascript" charset="utf-8"></script>	
+	<script src="./../js/app.js" type="text/javascript" charset="utf-8"></script>
+
 </body>
 </html>

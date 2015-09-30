@@ -1,10 +1,12 @@
 //Problem: No user interaction causes no change to application
 //Solution: When user interacts cause changes appropriately
+var socket = io.connect();
 var color = $(".selected").css("background-color");
 var $canvas = $("canvas");
 var context = $canvas[0].getContext("2d");
 var lastEvent;
 var mouseDown = false;
+var pair_data = {};
 
 //When clicking on control list items
 $(".controls").on("click", "li", function(){
@@ -52,11 +54,26 @@ $canvas.mousedown(function(e){
   //Draw lines
   if(mouseDown) {
     context.beginPath();
+
+    // console.log(e);
+    // console.log(context);
+
     context.moveTo(lastEvent.offsetX, lastEvent.offsetY);
+    pair_data.first = {offsetX: lastEvent.offsetX, offsetY:lastEvent.offsetY};
     context.lineTo(e.offsetX, e.offsetY);
+    pair_data.last = {offsetX: e.offsetX, offsetY:e.offsetY};
     context.strokeStyle = color;
+    pair_data.color = color;
+
+    // console.log(context);
+
     context.stroke();
     lastEvent = e;
+    
+
+
+    socket.emit('drawling_req', pair_data);
+
   }
 }).mouseup(function(){
   mouseDown = false;
@@ -65,8 +82,29 @@ $canvas.mousedown(function(e){
 });
 
 
+socket.on('drawling_response', function(output){
+    // console.log('hehe');
+    // console.log(output);
+    // console.log('lol');
+    context.beginPath();
 
-  
+    // console.log(e);
+    // console.log(context);
+
+    context.moveTo(output.first.offsetX, output.first.offsetY);
+    context.lineTo(output.last.offsetX, output.last.offsetY);
+    context.strokeStyle = output.color;
+
+    // console.log(context);
+
+    context.stroke();
+
+})
+
+
+
+
+
 
 
 

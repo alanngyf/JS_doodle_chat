@@ -2,6 +2,10 @@
 var express = require('express');
 // instantiate the app
 var app = express();
+
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
 // require path
 var path = require('path');
 // require body-parser
@@ -17,9 +21,9 @@ app.use(express.static(path.join(__dirname, './client')));
 
 app.set('client', path.join(__dirname, "./client/partials"));
 
-app.get('/partials/doodle', function(req, res){
-	res.render('/partials/doodle');
-})
+// app.get('/doodle', function(req, res){
+// 	res.render('/partials/index.html');
+// })
 
 // requrie mongoose.js from config
 // Note - you must include the mongoose.js file in your server.js file 
@@ -30,16 +34,33 @@ require('./server/config/mongoose.js');
 var route_setter = require("./server/config/routes.js");
 route_setter(app);
 
-var server = app.listen(8888, function(){
+
+io.on('connection', function(socket){
+  	console.log('a user connected');
+  	// If you don't know where this code is supposed to go reread the above info 
+	socket.on("drawling_req", function (data){
+	    // console.log(data);
+	    socket.broadcast.emit("drawling_response", data);
+	    // socket.emit('server_response', {response: "sockets are the best!"});
+	})	
+	// socket.on("drawling_req_end", function (data){
+	//     console.log(data);
+	//     // socket.emit('server_response', {response: "sockets are the best!"});
+	// })
+});
+
+
+
+http.listen(8888, function(){
 	console.log("chat with doodle pad on port 8888");
 });
 
-var io = require('socket.io').listen(server);
+// var io = require('socket.io').listen(server);
 
-// Whenever a connection event happens (the connection event is built in) run the following code
-io.sockets.on('connection', function (socket) {
-  console.log("WE ARE USING SOCKETS!");
-  console.log(socket.id);
-  //all the socket code goes in here!
-})
- 
+// // Whenever a connection event happens (the connection event is built in) run the following code
+// io.sockets.on('connection', function (socket) {
+//   console.log("WE ARE USING SOCKETS!");
+//   console.log(socket.id);
+//   //all the socket code goes in here!
+// })
+//  

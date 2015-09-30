@@ -13,8 +13,13 @@ doodlesController.show_all = function(req, res) {
 		else
 		{
 			res.json(results);
+			// res.redirect('/partials/doodle');
 		}
 	})
+}
+
+doodlesController.save_all = function(req, res) {
+	
 }
 
 
