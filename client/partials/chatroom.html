@@ -75,7 +75,7 @@
                 RECENT CHAT HISTORY
             </div>
             <div class="panel-body">
-                <ul class="media-list" id="msg_board" ng-repeat="msg in messages">
+                <ul class="media-list" id="msg_board" ng-repeat="msg in messages | orderBy: '-created_at' ">
 
                     <li class="media">
 
@@ -88,7 +88,7 @@
                                 <div class="media-body" >
                                         {{msg.msg}}
                                     <br />
-                                   <small class="text-muted">{{msg.user_name}} | 23rd June at 5:00pm</small>
+                                   <small class="text-muted">{{msg.user_name}} | {{ msg.created_at | date: 'medium' }}</small>
                                     <hr />
                                 </div>
                             </div>

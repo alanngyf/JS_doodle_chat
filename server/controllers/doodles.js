@@ -23,7 +23,8 @@ doodlesController.save_message = function(data)
 {
 	var new_msg = new Messages({
 		user_name: data.name,
-		msg: data.msg
+		msg: data.msg,
+		created_at: Date()
 	});
 	new_msg.save({}, function(err,data)
 	{
