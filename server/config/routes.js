@@ -6,6 +6,8 @@ module.exports = function(app) {
 		// doodlesController.show_all(req, res);
 		res.redirect('/partials');
 	})
-
-
+	app.get('/show_msg', function(req, res){
+		// doodlesController.show_all(req, res);
+		doodlesController.show_msg(req, res);
+	})
 }

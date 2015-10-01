@@ -34,20 +34,9 @@ require('./server/config/mongoose.js');
 var route_setter = require("./server/config/routes.js");
 route_setter(app);
 
+require('./server/config/socketIo.js')(io);
 
-io.on('connection', function(socket){
-  	console.log('a user connected');
-  	// If you don't know where this code is supposed to go reread the above info 
-	socket.on("drawling_req", function (data){
-	    // console.log(data);
-	    socket.broadcast.emit("drawling_response", data);
-	    // socket.emit('server_response', {response: "sockets are the best!"});
-	})	
-	// socket.on("drawling_req_end", function (data){
-	//     console.log(data);
-	//     // socket.emit('server_response', {response: "sockets are the best!"});
-	// })
-});
+
 
 
 

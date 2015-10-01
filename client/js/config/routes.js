@@ -1,9 +1,9 @@
-	// create our angular module
-	// var doodlesApp = angular.module('doodleApp', ['ngRoute']);
-	// doodleApp.config(function($routeProvider)
-	// {
-	// 	$routeProvider
-	// 	.when('/doodle', {
-	// 		templaterUrl: 'partials/doodle.html'
-	// 	})
-	// })
+var myApp = angular.module('myApp', ['ngRoute']);
+
+// CLIENTSIDE ROUTING
+// myApp.config(function ($routeProvider){
+// 	$routeProvider
+// 	.when('/', {templateUrl: 'partials/customers.html'})
+// 	.when('/orders', {templateUrl: 'partials/orders.html'})
+// 	.otherwise({redirectTo: '/'});
+// });
