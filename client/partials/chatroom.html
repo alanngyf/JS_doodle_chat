@@ -25,10 +25,12 @@
         $('#submit').click(function()
         {
             message = $('#message').val();
-            socket.emit('send_msg', {name: current_user, msg: message});
+
+            socket.emit('send_msg', {name: current_user, msg: message, created_at: getDate(Date.now())});
         });
         socket.on("get_msg", function(data)
         {
+            var dformat = getDate(data.created_at);
             $('#my_msg').append('<li class="media">' + 
                                         '<div class="media-body">' +
                                             '<div class="media">'  + 
@@ -37,8 +39,10 @@
                                                     '<div class="media-body" >'+
                                                     data.msg
                                                     +'<br>'
-                                                    +'<small class="text-muted">' + 
-                                                    data.name
+                                                    +'<small class="text-muted">' 
+                                                    + data.name
+                                                    + " | "
+                                                    + dformat
                                                     + '</small>'
                                                     +'</div>'
                                             +
@@ -59,6 +63,31 @@
             // return false;    //<---- Add this line
           }
         });
+        function getDate(date)
+        {
+            var month = new Array();
+            month[0] = "Jan";
+            month[1] = "Feb";
+            month[2] = "Mar";
+            month[3] = "Apr";
+            month[4] = "May";
+            month[5] = "Jun";
+            month[6] = "Jul";
+            month[7] = "Aug";
+            month[8] = "Sep";
+            month[9] = "Oct";
+            month[10] = "Nov";
+            month[11] = "Dec";
+            var d = new Date(date);
+            dformat = [(month[d.getMonth()]),
+               d.getDate()].join(' ') +
+               ", " +
+               d.getFullYear() +' ' +
+              [d.getHours(),
+               d.getMinutes(),
+               d.getSeconds()].join(':');
+            return dformat;
+        }
     })
     </script>
 </head>
@@ -75,7 +104,7 @@
                 RECENT CHAT HISTORY
             </div>
             <div class="panel-body">
-                <ul class="media-list" id="msg_board" ng-repeat="msg in messages | orderBy: '-created_at' ">
+                <ul class="media-list" id="msg_board" ng-repeat="msg in messages | orderBy: 'created_at' ">
 
                     <li class="media">
 
@@ -88,7 +117,7 @@
                                 <div class="media-body" >
                                         {{msg.msg}}
                                     <br />
-                                   <small class="text-muted">{{msg.user_name}} | {{ msg.created_at | date: 'medium' }}</small>
+                                   <small class="text-muted">{{msg.user_name}} | {{ msg.created_at | date: 'MMM d, y HH:mm:ss' }}</small>
                                     <hr />
                                 </div>
                             </div>
