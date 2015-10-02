@@ -1,15 +1,83 @@
 // require express
-var express = require('express');
+var express = require('express')
+  , path = require('path')
+  , passport = require('passport')
+  , util = require('util')
+  , FacebookStrategy = require('passport-facebook').Strategy
+  , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
+  , logger = require('morgan')
+  , session = require('express-session')
+  , bodyParser = require("body-parser")
+  , cookieParser = require("cookie-parser")
+  , methodOverride = require('method-override');
+
+var FACEBOOK_APP_ID = "1630788790522822";
+var FACEBOOK_APP_SECRET = "f4ca0a5e72cd1d217d79ad4cbfbcad25";
+var GOOGLE_CLIENT_ID = "587824968185-2s786d90fcua2nf1ljh64mjm87efedke.apps.googleusercontent.com";
+var GOOGLE_CLIENT_SECRET = "vJm1wHXnsNADd8gH08QzFkAh";
+
+
+// Passport session setup.
+//   To support persistent login sessions, Passport needs to be able to
+//   serialize users into and deserialize users out of the session.  Typically,
+//   this will be as simple as storing the user ID when serializing, and finding
+//   the user by ID when deserializing.  However, since this example does not
+//   have a database of user records, the complete Facebook profile is serialized
+//   and deserialized.
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+// Use the FacebookStrategy within Passport.
+//   Strategies in Passport require a `verify` function, which accept
+//   credentials (in this case, an accessToken, refreshToken, and Facebook
+//   profile), and invoke a callback with a user object.
+passport.use(new FacebookStrategy({
+    clientID: FACEBOOK_APP_ID,
+    clientSecret: FACEBOOK_APP_SECRET,
+    callbackURL: "http://localhost:8888/auth/facebook/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    // asynchronous verification, for effect...
+    process.nextTick(function () {
+      
+      // To keep the example simple, the user's Facebook profile is returned to
+      // represent the logged-in user.  In a typical application, you would want
+      // to associate the Facebook account with a user record in your database,
+      // and return that user instead.
+      return done(null, profile);
+    });
+  }
+));
+
+// Use the GoogleStrategy within Passport.
+//   Strategies in Passport require a `verify` function, which accept
+//   credentials (in this case, an accessToken, refreshToken, and Google
+//   profile), and invoke a callback with a user object.
+passport.use(new GoogleStrategy({
+    clientID: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:8888/auth/google/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+    // asynchronous verification, for effect...
+    process.nextTick(function () {
+      
+      // To keep the example simple, the user's Google profile is returned to
+      // represent the logged-in user.  In a typical application, you would want
+      // to associate the Google account with a user record in your database,
+      // and return that user instead.
+      return done(null, profile);
+    });
+  }
+));
+
 // instantiate the app
 var app = express();
-
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-
-// require path
-var path = require('path');
-// require body-parser
-var bodyParser = require('body-parser');
 
 // for regualr post requests
 app.use(bodyParser.urlencoded({extended: true}));
@@ -18,12 +86,19 @@ app.use(bodyParser.json());
 
 // set up a static file server that points to the "client" directory
 app.use(express.static(path.join(__dirname, './client')));
+app.set('views', path.join(__dirname, './client'));
+app.set('view engine', 'ejs');
+app.use(logger());
+app.use(cookieParser());
+app.use(methodOverride());
+app.use(session({ secret: 'keyboard cat' }));
+// Initialize Passport!  Also use passport.session() middleware, to support
+// persistent login sessions (recommended).
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.set('client', path.join(__dirname, "./client/partials"));
-
-// app.get('/doodle', function(req, res){
-// 	res.render('/partials/index.html');
-// })
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
 
 // requrie mongoose.js from config
 // Note - you must include the mongoose.js file in your server.js file 
@@ -32,7 +107,7 @@ require('./server/config/mongoose.js');
 
 // route setter
 var route_setter = require("./server/config/routes.js");
-route_setter(app);
+route_setter(app, passport);
 
 require('./server/config/socketIo.js')(io);
 
@@ -53,3 +128,13 @@ http.listen(8888, function(){
 //   //all the socket code goes in here!
 // })
 //  
+
+// Simple route middleware to ensure user is authenticated.
+//   Use this route middleware on any resource that needs to be protected.  If
+//   the request is authenticated (typically via a persistent login session),
+//   the request will proceed.  Otherwise, the user will be redirected to the
+//   login page.
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) { return next(); }
+  res.redirect('/login')
+}
