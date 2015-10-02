@@ -17,6 +17,9 @@
     <!-- BOOTSTRAP CORE STYLE CSS -->
     <link href="../static/css/bootstrap.css" rel="stylesheet" />
     <script type="text/javascript">
+    $(window).load(function() {
+  // $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+});
     $(document).ready(function()
     {
         var current_user = prompt("Input your name!");
@@ -44,6 +47,7 @@
                                                     + " | "
                                                     + dformat
                                                     + '</small>'
+                                                    + '<hr/>'
                                                     +'</div>'
                                             +
                                             '</div>'
@@ -53,6 +57,7 @@
                                     '</li>');
             $('#message').val("");
             $('#message').focus();
+            $('.panel-body').scrollTop(420);
             
         })
         $('.input-group').keypress(function (e) {
@@ -103,8 +108,9 @@
             <div class="panel-heading">
                 RECENT CHAT HISTORY
             </div>
-            <div class="panel-body">
-                <ul class="media-list" id="msg_board" ng-repeat="msg in messages | orderBy: 'created_at' ">
+            <div class="panel-body" id="msg_panel">
+            <a href="" ng-submit="showMore()">More history</a>
+                <ul class="media-list" id="msg_board" ng-repeat="msg in messages | orderBy: 'created_at' | limitTo: -limit">
 
                     <li class="media">
 
