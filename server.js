@@ -1,18 +1,18 @@
 // require express
-var express = require('express')
-  , path = require('path')
-  , passport = require('passport')
-  , util = require('util')
-  , FacebookStrategy = require('passport-facebook').Strategy
-  , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy
-  , logger = require('morgan')
-  , session = require('express-session')
-  , bodyParser = require("body-parser")
-  , cookieParser = require("cookie-parser")
-  , methodOverride = require('method-override');
+var express = require('express'),
+    path = require('path'),
+    passport = require('passport'),
+    util = require('util'),
+    FacebookStrategy = require('passport-facebook').Strategy,
+    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
+    logger = require('morgan'),
+    session = require('express-session'),
+    bodyParser = require("body-parser"),
+    cookieParser = require("cookie-parser"),
+    methodOverride = require('method-override');
 
-var FACEBOOK_APP_ID = "1630788790522822";
-var FACEBOOK_APP_SECRET = "f4ca0a5e72cd1d217d79ad4cbfbcad25";
+var FACEBOOK_APP_ID = "651789438302199";
+var FACEBOOK_APP_SECRET = "e8c1db2aa54683a2ba893b4442df4bf8";
 var GOOGLE_CLIENT_ID = "587824968185-2s786d90fcua2nf1ljh64mjm87efedke.apps.googleusercontent.com";
 var GOOGLE_CLIENT_SECRET = "vJm1wHXnsNADd8gH08QzFkAh";
 
@@ -88,10 +88,11 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, './client')));
 app.set('views', path.join(__dirname, './client'));
 app.set('view engine', 'ejs');
-app.use(logger());
+app.use(logger("combined"));
 app.use(cookieParser());
 app.use(methodOverride());
-app.use(session({ secret: 'keyboard cat' }));
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 }, resave: true, saveUninitialized: true }));
+// app.use(session({ secret: 'keyboard cat' }));
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
 app.use(passport.initialize());
@@ -136,5 +137,5 @@ http.listen(8888, function(){
 //   login page.
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login')
+  res.redirect('/login');
 }

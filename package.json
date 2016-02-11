@@ -8,7 +8,7 @@
     "express": "~4.2.0",
     "express-session": ">= 1.6.1",
     "method-override": ">= 2.0.2",
-    "mongoose": "latest",
+    "mongoose": "^4.1.12",
     "morgan": ">= 1.1.1",
     "passport": ">= 0.0.0",
     "passport-facebook": ">= 0.0.0",

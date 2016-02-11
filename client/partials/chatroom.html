@@ -16,83 +16,82 @@
     <title>Chat Room</title>
     <!-- BOOTSTRAP CORE STYLE CSS -->
     <link href="../static/css/bootstrap_chat.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../static/css/main.css">
+
     <script type="text/javascript">
-    $(window).load(function() {
-  // $("html, body").animate({ scrollTop: $(document).height() }, 1000);
-});
     $(document).ready(function()
     {
-        var current_user = prompt("Input your name!");
-        var socket = io.connect();
-        var message;
-        $('#submit').click(function()
-        {
-            message = $('#message').val();
+    var current_user = "Frank";
+    var socket = io.connect();
+    var message;
+    $('#submit').click(function()
+    {
+        message = $('#message').val();
 
-            socket.emit('send_msg', {name: current_user, msg: message, created_at: getDate(Date.now())});
-        });
-        socket.on("get_msg", function(data)
-        {
-            var dformat = getDate(data.created_at);
-            $('#my_msg').append('<li class="media">' + 
-                                        '<div class="media-body">' +
-                                            '<div class="media">'  + 
-                                            '<a class="pull-left" href="#">' + 
-                                                '<img class="media-object img-circle " src="../static/img/user.png" /></a>'+
-                                                    '<div class="media-body" >'+
-                                                    data.msg
-                                                    +'<br>'
-                                                    +'<small class="text-muted">' 
-                                                    + data.name
-                                                    + " | "
-                                                    + dformat
-                                                    + '</small>'
-                                                    + '<hr/>'
-                                                    +'</div>'
-                                            +
-                                            '</div>'
-                                      + 
-                                      '</div>'
-                                      +
-                                    '</li>');
-            $('#message').val("");
-            $('#message').focus();
-            $('.panel-body').scrollTop(420);
-            
-        })
-        $('.input-group').keypress(function (e) {
-          if (e.which == 13) {
-            $('#submit').click();
-            $('#message').val("");
-            $('#message').focus();
-            // return false;    //<---- Add this line
-          }
-        });
-        function getDate(date)
-        {
-            var month = new Array();
-            month[0] = "Jan";
-            month[1] = "Feb";
-            month[2] = "Mar";
-            month[3] = "Apr";
-            month[4] = "May";
-            month[5] = "Jun";
-            month[6] = "Jul";
-            month[7] = "Aug";
-            month[8] = "Sep";
-            month[9] = "Oct";
-            month[10] = "Nov";
-            month[11] = "Dec";
-            var d = new Date(date);
-            dformat = [(month[d.getMonth()]),
-               d.getDate()].join(' ') +
-               ", " +
-               d.getFullYear() +' ' +
-              [d.getHours(),
-               d.getMinutes(),
-               d.getSeconds()].join(':');
-            return dformat;
-        }
+        socket.emit('send_msg', {name: current_user, msg: message, created_at: getDate(Date.now())});
+    });
+    socket.on("get_msg", function(data)
+    {
+        var dformat = getDate(data.created_at);
+        $('#my_msg').append('<li class="media">' + 
+                                    '<div class="media-body">' +
+                                        '<div class="media">'  + 
+                                        '<a class="pull-left" href="#">' + 
+                                            '<img class="media-object img-circle " src="../static/img/user.png" /></a>'+
+                                                '<div class="media-body" >'+
+                                                data.msg
+                                                +'<br>'
+                                                +'<small class="text-muted">' 
+                                                + data.name
+                                                + " | "
+                                                + dformat
+                                                + '</small>'
+                                                + '<hr/>'
+                                                +'</div>'
+                                        +
+                                        '</div>'
+                                  + 
+                                  '</div>'
+                                  +
+                                '</li>');
+        $('#message').val("");
+        $('#message').focus();
+        $('.panel-body').scrollTop(420);
+        
+    })
+    $('.input-group').keypress(function (e) {
+      if (e.which == 13) {
+        $('#submit').click();
+        $('#message').val("");
+        $('#message').focus();
+        // return false;    //<---- Add this line
+      }
+    });
+    function getDate(date)
+    {
+        var month = new Array();
+        month[0] = "Jan";
+        month[1] = "Feb";
+        month[2] = "Mar";
+        month[3] = "Apr";
+        month[4] = "May";
+        month[5] = "Jun";
+        month[6] = "Jul";
+        month[7] = "Aug";
+        month[8] = "Sep";
+        month[9] = "Oct";
+        month[10] = "Nov";
+        month[11] = "Dec";
+        var d = new Date(date);
+        dformat = [(month[d.getMonth()]),
+           d.getDate()].join(' ') +
+           ", " +
+           d.getFullYear() +' ' +
+          [d.getHours(),
+           d.getMinutes(),
+           d.getSeconds()].join(':');
+        return dformat;
+    }
     })
     </script>
 </head>
@@ -100,7 +99,7 @@
   <div class="container" >
 <div ng-controller='MessageController'>
 <div class="row " style="padding-top:40px;">
-    
+    <a href="/partials">Doodle Pad</a>
     <h3 class="text-center" >Chat Room </h3>
     <br /><br />
     <div class="col-md-8">
@@ -137,6 +136,12 @@
                 </ul>
             </div>
             <div class="panel-footer">
+                <div class="items">
+                    
+                    <input id="colorStyle" type="color" placeHolder='#000' title="font color" />
+                    <input id="emoji" type="button" value="emoji" title="emoji" />
+                    <div id="emojiWrapper"></div>
+                </div>
                 <div class="input-group">
                     <input type="text" class="form-control" id="message" placeholder="Enter Message" />
                     <span class="input-group-btn">
@@ -174,6 +179,36 @@
     </div>
 </div>
 </div>
-  </div>
+</div>
+
+        <!-- <div class="wrapper">
+            <div class="banner">
+                <h1>HiChat :)</h1>
+                <span id="status"></span>
+            </div>
+            <div id="historyMsg">
+            </div>
+            <div class="controls" >
+                <div class="items">
+
+                    <label for="sendImage" class="imageLable">
+                        <input type="button" value="image"  />
+                        <input id="sendImage" type="file" value="image"/>
+                    </label>
+                    <input id="clearBtn" type="button" value="clear" title="clear screen" />
+                </div>
+                <textarea  placeHolder="enter to send"></textarea>
+                <input id="sendBtn" type="button" value="SEND">
+            </div>
+        </div>
+        <div id="loginWrapper">
+            <p id="info">connecting to server...</p>
+            <div id="nickWrapper">
+                <input type="text" placeHolder="nickname" id="nicknameInput" />
+                <input type="button" value="OK" id="loginBtn" />
+            </div>
+        </div> -->
+<script src="../js/scripts.js"></script>
+
 </body>
 </html>

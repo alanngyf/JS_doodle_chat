@@ -46,6 +46,16 @@ $("#addNewColor").click(function(){
   $newColor.click();
 });
 
+//Erase drawing
+$('.erase').click(function()
+{
+  var $newColor = $("<li style='visibility: hidden;'></li>");
+  $newColor.css("background-color", "#FFFFFF");
+  $(".controls ul").append($newColor);
+  //Select the new color
+  $newColor.click();
+})
+
 //On mouse events on the canvas
 $canvas.mousedown(function(e){
   lastEvent = e;

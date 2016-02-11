@@ -1,6 +1,7 @@
 var doodlesController = require('./../controllers/doodles.js');
 module.exports = function(io)
 {
+    var users = [];
 	io.on('connection', function(socket){
 	  	console.log('a user connected');
 	  	// If you don't know where this code is supposed to go reread the above info 
@@ -17,19 +18,19 @@ module.exports = function(io)
 			doodlesController.save_message(data);
 			io.emit("get_msg", data);
 		});
-		
+
 		//user login;
-	    // socket.on('login', function(nickname) {
-	    //     if (users.indexOf(nickname) > -1) {
-	    //         socket.emit('nickExisted');
-	    //     } else {
-	    //         socket.userIndex = users.length;
-	    //         socket.nickname = nickname;
-	    //         users.push(nickname);
-	    //         socket.emit('loginSuccess');
-	    //         io.sockets.emit('system', nickname, users.length, 'login');
-	    //     };
-	    // });
+	    socket.on('login', function(nickname) {
+	        if (users.indexOf(nickname) > -1) {
+	            socket.emit('nickExisted');
+	        } else {
+	            socket.userIndex = users.length;
+	            socket.nickname = nickname;
+	            users.push(nickname);
+	            socket.emit('loginSuccess');
+	            io.sockets.emit('system', nickname, users.length, 'login');
+	        };
+	    });
 
 	    //user leaves
 	    socket.on('disconnect', function() {

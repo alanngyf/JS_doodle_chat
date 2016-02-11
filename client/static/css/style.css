@@ -69,6 +69,11 @@ button {
 	font-size: 16px;
 	line-height: 40px;
 }
+.erase
+{
+	background: #fc4c4f;
+	box-shadow: 0 3px 0 0 #fc4c4f;
+}
 #revealColorSelect {
 	border: none;
 	border-radius: 5px;

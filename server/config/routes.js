@@ -11,9 +11,16 @@ module.exports = function(app, passport) {
 	});
 
 	app.get('/', function(req, res){
-	  console.log(req.user);
-	  res.render('index', { user: req.user });
-	});
+      // console.log(req.user);
+      if(req.user === undefined)
+      {
+          res.redirect("login");
+      }
+      else
+      {
+          res.redirect("partials/chatroom.html");
+      }
+    });
 
 	app.get('/login', function(req, res){
 		res.render('login');

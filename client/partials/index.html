@@ -1,7 +1,7 @@
 <!DOCTYPE html ng-app="doodlesApp">
 <html>
 <head>
-	<title>Simple Drawing Application</title>
+	<title>Doodle Pad</title>
 	<link rel="stylesheet" href="./../static/css/style.css" type="text/css" media="screen" title="no title" charset="utf-8">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
@@ -40,6 +40,7 @@
 			<li class="yellow"></li>
 		</ul>
 		<button id="revealColorSelect">New Color</button>
+		<button class="erase" id="revealColorSelect">Erase!</button>
 		<div id="colorSelect">
 			<span id="newColor"></span>
 			<div class="sliders">
@@ -54,7 +55,7 @@
 				<p>
 					<label for="blue">Blue</label>
 					<input id="blue" name="blue" type="range" min=0 max=255 value=0>
-				</p>ou
+				</p>
 			</div>
 			<div>
 			<button id="addNewColor">Add Color</button>
